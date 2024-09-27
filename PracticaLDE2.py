@@ -131,7 +131,8 @@ class ListaDobleEnlazada:
         print("Lista de estudiantes desde la cabeza:")
         while actual is not None:
             estudiante = actual.data
-            print(f"{estudiante['codigo']}: {estudiante['nombre']} {estudiante['apellidos']} - Nota: {estudiante['nota']}")
+            print(f"{estudiante['codigo']}: {estudiante['nombre']} "
+                  f"{estudiante['apellidos']} - Correo: {estudiante['correo']} - Nota: {estudiante['nota']}")
             actual = actual.next
         print()
 
@@ -145,7 +146,8 @@ class ListaDobleEnlazada:
         print("Lista de estudiantes desde la cola:")
         while actual is not None:
             estudiante = actual.data
-            print(f"{estudiante['codigo']}: {estudiante['nombre']} {estudiante['apellidos']} - Nota: {estudiante['nota']}")
+            print(f"{estudiante['codigo']}: {estudiante['nombre']} "
+                  f"{estudiante['apellidos']} - Correo: {estudiante['correo']} - Nota: {estudiante['nota']}")
             actual = actual.prev
         print()
 
@@ -154,37 +156,90 @@ def menu():
     lista_estudiantes = ListaDobleEnlazada()
 
     while True:
-        print("\n---- MENÚ DE ESTUDIANTES ----")
+        print("\n-------- MENÚ DE ESTUDIANTES --------")
         print("a) Agregar un estudiante")
+        print("-------------------------------------")
         print("b) Buscar un estudiante por código")
+        print("-------------------------------------")
         print("c) Eliminar un estudiante")
+        print("-------------------------------------")
         print("d) Total de estudiantes aprobados")
+        print("-------------------------------------")
         print("e) Total de estudiantes reprobados")
+        print("-------------------------------------")
         print("f) Nota promedio")
+        print("-------------------------------------")
         print("g) Imprimir desde la cabeza")
+        print("-------------------------------------")
         print("h) Imprimir desde la cola")
+        print("-------------------------------------")
         print("i) Salir")
+        print("-------------------------------------")
 
         opcion = input("Selecciona una opción: ").lower()
 
         if opcion == 'a':
-            nombre = input("Nombre: ")
-            apellidos = input("Apellidos: ")
-            correo = input("Correo: ")
-            nota = float(input("Nota: "))
+            while True:
+                nombre = input("Nombre: ").strip()
+                if all(letra.isalpha() or letra.isspace() for letra in nombre) and len(nombre) > 0:
+                    break
+                else:
+                    print("Error: El nombre solo debe contener letras y no puede ser un espacio en blanco.")
+
+            while True:
+                apellidos = input("Apellidos: ").strip()
+                if all(letra.isalpha() or letra.isspace() for letra in apellidos) and len(apellidos) > 0:
+                    break
+                else:
+                    print("Error: Los apellidos solo deben contener letras y espacios, y no pueden estar vacíos.")
+
+            while True:
+                correo = input("Correo: ").lower()
+                if "@" in correo and correo.endswith(".com"):
+                    break
+                else:
+                    print("Error: El correo debe contener '@' y terminar en '.com'. Inténtalo de nuevo.")
+
+            while True:
+                nota = input("Nota (0 a 5): ")
+                if nota.replace('.', '', 1).isdigit() and nota.count('.') < 2:
+                    nota = float(nota)
+                    if 0 <= nota <= 5:
+                        break
+                    else:
+                        print("Error: La nota debe estar en el rango de 0 a 5. Inténtalo de nuevo.")
+                else:
+                    print("Error: La nota debe ser un número válido. Inténtalo de nuevo.")
+
             lista_estudiantes.agregar_estudiante(nombre, apellidos, correo, nota)
             print("Estudiante agregado correctamente.")
 
         elif opcion == 'b':
-            codigo = int(input("Código del estudiante a buscar: "))
+            while True:
+                codigo_input = input("Código del estudiante a buscar: ")
+                if codigo_input.isdigit():
+                    codigo = int(codigo_input)
+                    break
+                else:
+                    print("Error: El código debe ser un número entero. Inténtalo de nuevo.")
+
             estudiante = lista_estudiantes.buscar_estudiante(codigo)
             if estudiante:
-                print(f"Estudiante encontrado: {estudiante['nombre']} {estudiante['apellidos']}, Nota: {estudiante['nota']}")
+                print(
+                    f"Estudiante encontrado con código: {estudiante['codigo']} - {estudiante['nombre']} {estudiante['apellidos']}"
+                    f" - Correo: {estudiante['correo']}, Nota: {estudiante['nota']}")
             else:
-                print("Estudiante no encontrado.")
+                print(f"Estudiante con código: {codigo} no encontrado.")
 
         elif opcion == 'c':
-            codigo = int(input("Código del estudiante a eliminar: "))
+            while True:
+                codigo_input = input("Código del estudiante a eliminar: ")
+                if codigo_input.isdigit():
+                    codigo = int(codigo_input)
+                    break
+                else:
+                    print("Error: El código debe ser un número entero. Inténtalo de nuevo.")
+
             lista_estudiantes.eliminar_estudiante(codigo)
 
         elif opcion == 'd':
@@ -210,6 +265,5 @@ def menu():
             print("Opción inválida, intenta de nuevo.")
 
 
-# Ejecutar el programa
-# Enviamos commit a el repositorio
-menu()
+if __name__ == "__main__":
+    menu()
