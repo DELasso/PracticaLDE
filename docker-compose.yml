@@ -1,0 +1,8 @@
+version: '3.8'
+
+services:
+  estudiantes:
+    image: lassovb/practicalde
+    container_name: practical_kilby
+    stdin_open: true
+    tty: true
